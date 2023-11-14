@@ -3,7 +3,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class PostDto {
     @NotBlank(message = "*user_id* cannot be null.")
-    private Integer userId;
+    private String userId;
 
     @NotBlank(message = "*username* cannot be null.")
     private String username;
@@ -14,11 +14,11 @@ public class PostDto {
     @NotBlank(message = "Text cannot be null.")
     private String text;
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
