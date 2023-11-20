@@ -11,6 +11,8 @@ public class Post {
     @Column(name = "user_id")
     private Integer userId;
 
+    private String community;
+
     private String username;
 
     private String title;
@@ -55,5 +57,13 @@ public class Post {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getCommunity() {
+        return community;
+    }
+
+    public void setCommunity(String community) {
+        this.community = community;
     }
 }

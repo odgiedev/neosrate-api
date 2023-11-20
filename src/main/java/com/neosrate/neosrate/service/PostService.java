@@ -1,7 +1,9 @@
 package com.neosrate.neosrate.service;
 
 import com.neosrate.neosrate.data.dto.PostDto;
+import com.neosrate.neosrate.data.model.Community;
 import com.neosrate.neosrate.data.model.Post;
+import com.neosrate.neosrate.repository.CommunityRepository;
 import com.neosrate.neosrate.repository.PostRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -23,6 +25,9 @@ import java.util.Set;
 public class PostService {
     @Autowired
     PostRepository postRepository;
+
+    @Autowired
+    CommunityRepository communityRepository;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -47,14 +52,16 @@ public class PostService {
         return ResponseEntity.status(HttpStatus.OK).body(allPost);
     }
 
-    public ResponseEntity<?> getPost(Integer postId) {
-        Optional<Post> post = postRepository.findById(postId);
+    public ResponseEntity<?> getAllCommunityPost(String community) {
+        List<Community> communityExists = communityRepository.findByName(community);
 
-        if(post.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post NOT FOUND.");
+        if(communityExists.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("COMMUNITY NOT FOUND.22");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(post);
+        List<Post> communities = postRepository.findByCommunity(community);
+
+        return ResponseEntity.status(HttpStatus.OK).body(communities);
     }
 
     public ResponseEntity<?> getAllUserPost(Integer userId) {

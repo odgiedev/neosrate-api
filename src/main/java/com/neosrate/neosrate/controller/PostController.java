@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/post")
-public class ShowController {
+public class PostController {
     @Autowired
     PostService postService;
 
@@ -22,9 +22,9 @@ public class ShowController {
         return postService.getAllPost();
     }
 
-    @GetMapping("/get/{showId}")
-    public ResponseEntity<?> getPost(@PathVariable Integer showId) {
-        return postService.getPost(showId);
+    @GetMapping("/get/all/community/{community}")
+    public ResponseEntity<?> getAllCommunityPost(@PathVariable String community) {
+        return postService.getAllCommunityPost(community);
     }
 
     @GetMapping("/get/all/{userId}")
