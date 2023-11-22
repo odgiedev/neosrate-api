@@ -27,9 +27,9 @@ public class PostController {
         return postService.getAllCommunityPost(community);
     }
 
-    @GetMapping("/get/all/{userId}")
-    public ResponseEntity<?> getAllUserPost(@PathVariable Integer userId) {
-        return postService.getAllUserPost(userId);
+    @GetMapping("/get/all/{username}")
+    public ResponseEntity<?> getAllUserPost(@PathVariable String username) {
+        return postService.getAllUserPost(username);
     }
 
     @PutMapping("/update/{showId}")

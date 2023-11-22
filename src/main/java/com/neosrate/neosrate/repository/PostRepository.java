@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface PostRepository extends CrudRepository<Post, Integer> {
-    List<Post> findByUserId(Integer userId);
+    List<Post> findByUsername(String username);
 
     List<Post> findByCommunity(String community);
 }

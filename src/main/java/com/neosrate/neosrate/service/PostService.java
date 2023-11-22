@@ -56,7 +56,7 @@ public class PostService {
         List<Community> communityExists = communityRepository.findByName(community);
 
         if(communityExists.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("COMMUNITY NOT FOUND.22");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CNF,COMMUNITY NOT FOUND.");
         }
 
         List<Post> communities = postRepository.findByCommunity(community);
@@ -64,8 +64,8 @@ public class PostService {
         return ResponseEntity.status(HttpStatus.OK).body(communities);
     }
 
-    public ResponseEntity<?> getAllUserPost(Integer userId) {
-        List<Post> posts = postRepository.findByUserId(userId);
+    public ResponseEntity<?> getAllUserPost(String username) {
+        List<Post> posts = postRepository.findByUsername(username);
 
         if (posts.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post NOT FOUND.");
