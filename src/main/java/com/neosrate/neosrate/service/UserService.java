@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -94,9 +95,16 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
         }
 
-        Optional<User> user_exists = userRepository.findByEmail(userData.getEmail());
+        UserDetails user_exists = userRepository.findByEmail(userData.getEmail());
 
-        if (user_exists.isEmpty()) {
+        //ALWAYS TRUE
+        //ALWAYS TRUE
+        //ALWAYS TRUE
+        //ALWAYS TRUE
+        //ALWAYS TRUE
+        //ALWAYS TRUE
+        //ALWAYS TRUE
+        if (user_exists.isEnabled()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("EMAIL AND/OR PASSWORD INCORRECT.");
         }
 
