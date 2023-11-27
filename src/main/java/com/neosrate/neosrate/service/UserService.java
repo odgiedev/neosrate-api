@@ -39,7 +39,7 @@ public class UserService {
 
         var user = userRepository.findByEmail(userData.getEmail());
 
-        if (!user.isEmpty()) {
+        if (user.isEnabled()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("EMAIL ALREADY REGISTERED.");
         }
 
@@ -95,25 +95,18 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
         }
 
-        UserDetails user_exists = userRepository.findByEmail(userData.getEmail());
+        UserDetails user = userRepository.findByEmail(userData.getEmail());
 
-        //ALWAYS TRUE
-        //ALWAYS TRUE
-        //ALWAYS TRUE
-        //ALWAYS TRUE
-        //ALWAYS TRUE
-        //ALWAYS TRUE
-        //ALWAYS TRUE
-        if (user_exists.isEnabled()) {
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("EMAIL AND/OR PASSWORD INCORRECT.");
         }
 
-        User user = user_exists.get();
+//        User user = user_exists.get();
 
-        if (!Objects.equals(user.getPasswd(), userData.getPasswd())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("EMAIL AND/OR PASSWORD INCORRECT.");
-        }
+//        if (!Objects.equals(user.getPasswd(), userData.getPasswd())) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("EMAIL AND/OR PASSWORD INCORRECT.");
+//        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body("user");
     }
 }

@@ -3,6 +3,7 @@ package com.neosrate.neosrate.controller;
 import com.neosrate.neosrate.data.dto.user.UserDto;
 import com.neosrate.neosrate.data.dto.user.UserSignInDto;
 import com.neosrate.neosrate.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody UserSignInDto userData) {
+    public ResponseEntity<?> signIn(@RequestBody @Valid UserSignInDto userData) {
         return userService.signIn(userData);
     }
 }
