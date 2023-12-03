@@ -1,6 +1,8 @@
 package com.neosrate.neosrate.data.dto.user;
 
+import com.neosrate.neosrate.data.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class UserDto {
     @NotBlank(message = "Username is required")
@@ -13,6 +15,17 @@ public class UserDto {
 
     @NotBlank(message = "Password is required")
     private String passwd;
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    @NotNull(message = "*role* is required")
+    private UserRole role;
 
     public String getEmail() {
         return email;

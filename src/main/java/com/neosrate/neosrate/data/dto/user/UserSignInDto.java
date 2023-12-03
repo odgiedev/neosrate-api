@@ -1,5 +1,6 @@
 package com.neosrate.neosrate.data.dto.user;
 
+import com.neosrate.neosrate.data.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 
 public class UserSignInDto {

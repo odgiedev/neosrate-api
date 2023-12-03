@@ -15,10 +15,21 @@ public class User implements UserDetails {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     private String username;
     private String email;
     private String passwd;
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private UserRole role;
 
     public Integer getId() {
@@ -49,7 +60,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return passwd;
     }
 
     public String getUsername() {

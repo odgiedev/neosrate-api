@@ -2,6 +2,7 @@ package com.neosrate.neosrate.service;
 
 import com.neosrate.neosrate.data.dto.user.UserDto;
 import com.neosrate.neosrate.data.dto.user.UserSignInDto;
+import com.neosrate.neosrate.data.enums.UserRole;
 import com.neosrate.neosrate.data.model.User;
 import com.neosrate.neosrate.repository.UserRepository;
 import jakarta.validation.ConstraintViolation;
@@ -12,7 +13,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -23,6 +27,12 @@ import java.util.Set;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    TokenService tokenService;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -39,9 +49,11 @@ public class UserService {
 
         var user = userRepository.findByEmail(userData.getEmail());
 
-        if (user.isEnabled()) {
+        if (user != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("EMAIL ALREADY REGISTERED.");
         }
+
+        userData.setPasswd(new BCryptPasswordEncoder().encode(userData.getPasswd()));
 
         userRepository.save(modelMapper.map(userData, User.class));
 
@@ -98,15 +110,15 @@ public class UserService {
         UserDetails user = userRepository.findByEmail(userData.getEmail());
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("EMAIL AND/OR PASSWORD INCORRECT.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ACCOUNT DOESN'T EXIST.");
         }
 
-//        User user = user_exists.get();
+        var usernamePassword = new UsernamePasswordAuthenticationToken(userData.getEmail(), userData.getPasswd());
 
-//        if (!Objects.equals(user.getPasswd(), userData.getPasswd())) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("EMAIL AND/OR PASSWORD INCORRECT.");
-//        }
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.status(HttpStatus.OK).body("user");
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+
+        return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 }
