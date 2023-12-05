@@ -55,6 +55,8 @@ public class UserService {
 
         userData.setPasswd(new BCryptPasswordEncoder().encode(userData.getPasswd()));
 
+        userData.setRole(UserRole.USERR);
+
         userRepository.save(modelMapper.map(userData, User.class));
 
         return ResponseEntity.status(HttpStatus.OK).body("USER CREATED.");

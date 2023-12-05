@@ -19,6 +19,9 @@ public class Post {
 
     private String text;
 
+    @Column(name = "file_path")
+    private String filePath;
+
     public Integer getId() {
         return id;
     }
@@ -65,5 +68,13 @@ public class Post {
 
     public void setCommunity(String community) {
         this.community = community;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
