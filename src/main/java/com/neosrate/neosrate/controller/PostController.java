@@ -17,9 +17,9 @@ public class PostController {
         return postService.createPost(showData);
     }
 
-    @GetMapping("/get/all")
-    public ResponseEntity<?> getAllPost() {
-        return postService.getAllPost();
+    @GetMapping("/get/all/{userId}")
+    public ResponseEntity<?> getAllPost(@PathVariable Integer userId) {
+        return postService.getAllPost(userId);
     }
 
     @GetMapping("/get/all/community/{community}")
@@ -27,9 +27,9 @@ public class PostController {
         return postService.getAllCommunityPost(community);
     }
 
-    @GetMapping("/get/all/{username}")
-    public ResponseEntity<?> getAllUserPost(@PathVariable String username) {
-        return postService.getAllUserPost(username);
+    @GetMapping("/get/all/user/{userId}")
+    public ResponseEntity<?> getAllUserPost(@PathVariable Integer userId) {
+        return postService.getAllUserPost(userId);
     }
 
     @PutMapping("/update/{showId}")

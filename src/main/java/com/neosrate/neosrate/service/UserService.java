@@ -4,6 +4,8 @@ import com.neosrate.neosrate.data.dto.user.UserDto;
 import com.neosrate.neosrate.data.dto.user.UserSignInDto;
 import com.neosrate.neosrate.data.enums.UserRole;
 import com.neosrate.neosrate.data.model.User;
+import com.neosrate.neosrate.data.model.UserProfile;
+import com.neosrate.neosrate.repository.UserProfileRepository;
 import com.neosrate.neosrate.repository.UserRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -29,6 +31,9 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
+    UserProfileRepository userProfileRepository;
+
+    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
@@ -40,13 +45,6 @@ public class UserService {
     Validator validator = factory.getValidator();
 
     public ResponseEntity<?> createUser(UserDto userData) {
-        Set<ConstraintViolation<UserDto>> val = validator.validate(userData);
-
-        if (!val.isEmpty()) {
-            String err = val.iterator().next().getMessage();
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
-        }
-
         var user = userRepository.findByEmail(userData.getEmail());
 
         if (user != null) {
@@ -57,7 +55,12 @@ public class UserService {
 
         userData.setRole(UserRole.USERR);
 
-        userRepository.save(modelMapper.map(userData, User.class));
+        User savedUser = userRepository.save(modelMapper.map(userData, User.class));
+
+        UserProfile userProfile = new UserProfile();
+        userProfile.setUserId(savedUser.getId());
+
+        userProfileRepository.save(userProfile);
 
         return ResponseEntity.status(HttpStatus.OK).body("USER CREATED.");
     }
@@ -102,13 +105,6 @@ public class UserService {
     }
 
     public ResponseEntity<?> signIn(UserSignInDto userData) {
-        Set<ConstraintViolation<UserSignInDto>> val = validator.validate(userData);
-
-        if (!val.isEmpty()) {
-            String err = val.iterator().next().getMessage();
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
-        }
-
         UserDetails user = userRepository.findByEmail(userData.getEmail());
 
         if (user == null) {

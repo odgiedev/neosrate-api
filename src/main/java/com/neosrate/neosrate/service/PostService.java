@@ -1,10 +1,13 @@
 package com.neosrate.neosrate.service;
 
+import com.neosrate.neosrate.data.PostAndLikeResponse;
 import com.neosrate.neosrate.data.dto.PostDto;
 import com.neosrate.neosrate.data.model.Community;
 import com.neosrate.neosrate.data.model.Post;
+import com.neosrate.neosrate.data.model.UserLike;
 import com.neosrate.neosrate.repository.CommunityRepository;
 import com.neosrate.neosrate.repository.PostRepository;
+import com.neosrate.neosrate.repository.UserLikeRepository;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -29,6 +32,9 @@ public class PostService {
     @Autowired
     CommunityRepository communityRepository;
 
+    @Autowired
+    UserLikeRepository userLikeRepository;
+
     ModelMapper modelMapper = new ModelMapper();
 
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -47,9 +53,16 @@ public class PostService {
         return ResponseEntity.status(HttpStatus.OK).body("Post CREATED.");
     }
 
-    public ResponseEntity<?> getAllPost() {
-        var allPost = postRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(allPost);
+    public ResponseEntity<?> getAllPost(Integer userId) {
+        Iterable<Post> allPost = postRepository.findAll();
+        List<UserLike> allUserLike = userLikeRepository.findByUserId(userId);
+
+        if (!allPost.iterator().hasNext()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("POST NOT FOUND.");
+        }
+
+        var bodyResponse = new PostAndLikeResponse((List<Post>) allPost, allUserLike);
+        return ResponseEntity.status(HttpStatus.OK).body(bodyResponse);
     }
 
     public ResponseEntity<?> getAllCommunityPost(String community) {
@@ -59,20 +72,62 @@ public class PostService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CNF,COMMUNITY NOT FOUND.");
         }
 
-        List<Post> communities = postRepository.findByCommunity(community);
+        List<Post> posts = postRepository.findByCommunity(community);
 
-        return ResponseEntity.status(HttpStatus.OK).body(communities);
+        List<UserLike> communityUserLike = userLikeRepository.findByCommunity(community);
+
+        var bodyResponse = new PostAndLikeResponse(posts, communityUserLike);
+
+        return ResponseEntity.status(HttpStatus.OK).body(bodyResponse);
     }
 
-    public ResponseEntity<?> getAllUserPost(String username) {
-        List<Post> posts = postRepository.findByUsername(username);
+    public ResponseEntity<?> getAllUserPost(Integer userId) {
+        List<Post> posts = postRepository.findByUserId(userId);
+        List<UserLike> allUserLike = userLikeRepository.findByUserId(userId);
 
         if (posts.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post NOT FOUND.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("POST NOT FOUND.");
+        }
+        var bodyResponse = new PostAndLikeResponse(posts, allUserLike);
+
+        return ResponseEntity.status(HttpStatus.OK).body(bodyResponse);
+    }
+
+    public Integer likePost(Post post, Integer likeType, Integer previousLikeType) {
+        System.out.println(post.getLikeCount());
+        System.out.println(likeType);
+        System.out.println(previousLikeType );
+        if (likeType == 1) {
+            if (previousLikeType == -1) {
+                post.setDislikeCount(post.getDislikeCount() - 1);
+                post.setLikeCount(post.getLikeCount() + 1);
+            } else if (previousLikeType == 0) {
+                post.setLikeCount(post.getLikeCount() + 1);
+            }
+            return 1;
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(posts);
+        else if (likeType == -1) {
+            if (previousLikeType == 1) {
+                post.setLikeCount(post.getLikeCount() - 1);
+                post.setDislikeCount(post.getDislikeCount() + 1);
+            } else if (previousLikeType == 0) {
+                post.setDislikeCount(post.getDislikeCount() + 1);
+            }
+            return -1;
+        }
 
+        else if (likeType == 0) {
+            if (previousLikeType == 1) {
+                post.setLikeCount(post.getLikeCount() - 1);
+            }
+            else if (previousLikeType == -1) {
+                post.setDislikeCount(post.getDislikeCount() - 1);
+            }
+            return 0;
+        }
+
+        return 0;
     }
 
     public ResponseEntity<String> updatePost(Integer postId, PostDto postUpdateData) {
@@ -91,8 +146,36 @@ public class PostService {
 
         Post post = postOptional.get();
 
-        post.setTitle(postUpdateData.getTitle());
-        post.setText(postUpdateData.getText());
+        if (postUpdateData.getTitle() != null) {
+            post.setTitle(postUpdateData.getTitle());
+        }
+
+        if (postUpdateData.getText() != null) {
+            post.setText(postUpdateData.getText());
+        }
+
+        if (postUpdateData.getLikeTrigger() != null) {
+            UserLike userLike = userLikeRepository.findByPostIdAndUserId(postId, postUpdateData.getUserIdLiker());
+
+            if (userLike != null) {
+                System.out.println("sim");
+                Integer likeType = likePost(post, postUpdateData.getLikeTrigger(), userLike.getLikeType());
+                userLike.setLikeType(likeType);
+
+                userLikeRepository.save(userLike);
+            } else {
+                UserLike newUserLike = new UserLike();
+                newUserLike.setUserId(postUpdateData.getUserIdLiker());
+                newUserLike.setPostId(post.getId());
+                newUserLike.setCommunity(post.getCommunity());
+
+                Integer likeType = likePost(post, postUpdateData.getLikeTrigger(), 0);
+
+                newUserLike.setLikeType(likeType);
+
+                userLikeRepository.save(newUserLike);
+            }
+        }
 
         postRepository.save(post);
 

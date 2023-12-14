@@ -8,5 +8,7 @@ import java.util.List;
 public interface PostRepository extends CrudRepository<Post, Integer> {
     List<Post> findByUsername(String username);
 
+    List<Post> findByUserId(Integer userId);
+
     List<Post> findByCommunity(String community);
 }

@@ -24,7 +24,6 @@ public class UserDto {
         this.role = role;
     }
 
-    @NotNull(message = "*role* is required")
     private UserRole role;
 
     public String getEmail() {

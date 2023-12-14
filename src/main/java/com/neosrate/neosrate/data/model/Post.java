@@ -19,6 +19,39 @@ public class Post {
 
     private String text;
 
+    public Integer getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(Integer dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
+
+    @Column(name = "dislike_count", columnDefinition = "INT DEFAULT 0")
+    private Integer dislikeCount;
+
+    @Column(name = "like_count", columnDefinition = "INT DEFAULT 0")
+    private Integer likeCount;
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    @Column(name = "comment_count", columnDefinition = "INT DEFAULT 0")
+    private Integer commentCount;
+
     @Column(name = "file_path")
     private String filePath;
 

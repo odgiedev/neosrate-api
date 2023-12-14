@@ -3,20 +3,70 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 
 public class PostDto {
-    @NotBlank(message = "*user_id* cannot be null.")
+    //@NotBlank(message = "*user_id* cannot be null.")
     private String userId;
 
-    @NotBlank(message = "Community cannot be null.")
+    //@NotBlank(message = "Community cannot be null.")
     private String community;
 
-    @NotBlank(message = "*username* cannot be null.")
+    //@NotBlank(message = "*username* cannot be null.")
     private String username;
 
-    @NotBlank(message = "Title cannot be null.")
+    //@NotBlank(message = "Title cannot be null.")
     private String title;
 
     //@NotBlank(message = "Text cannot be null.")
     private String text;
+
+    private Integer dislikeCount = 0;
+
+    public Integer getUserIdLiker() {
+        return userIdLiker;
+    }
+
+    public void setUserIdLiker(Integer userIdLiker) {
+        this.userIdLiker = userIdLiker;
+    }
+
+    private Integer userIdLiker;
+
+    public Integer getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(Integer dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
+
+    public Integer getLikeTrigger() {
+        return likeTrigger;
+    }
+
+    public void setLikeTrigger(Integer likeTrigger) {
+        this.likeTrigger = likeTrigger;
+    }
+
+    private Integer likeTrigger;
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    private Integer likeCount = 0;
+
+    private Integer commentCount = 0;
 
     private String createdAt;
 
