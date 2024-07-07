@@ -1,37 +1,34 @@
-package com.neosrate.neosrate.data.model;
+package com.neosrate.neosrate.data.dto.post;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-public class Comment {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+public class CommentDto {
     private Integer id;
 
-    @Column(name = "post_id", nullable = false)
-    private Integer postId;
-
-    @Column(name = "user_id", nullable = false)
+    @NotNull(message = "*userId* is required.")
     private Integer userId;
 
-    @Column(nullable = false)
+    @NotNull(message = "*postId* is required.")
+    private Integer postId;
+
+    @NotBlank(message = "*community* is required.")
     private String community;
 
-    @Column(nullable = false)
+    @NotBlank(message = "*creator* is required.")
     private String creator;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Comment is required.")
     private String comment;
 
-    @Column(name = "created_at", nullable = false)
     private String createdAt;
 
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getPostId() {
@@ -42,20 +39,20 @@ public class Comment {
         this.postId = postId;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
     public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getCreator() {

@@ -10,5 +10,11 @@ public interface UserLikeRepository extends CrudRepository<UserLike, Integer> {
 
     List<UserLike> findByUserId(Integer userId);
 
-    List<UserLike> findByCommunity(String community);
+    List<UserLike> findByCommunityAndUserId(String community, Integer userId);
+
+    void deleteAllByCommunity(String communityName);
+
+    void deleteAllByUserId(Integer ownerId);
+
+    void deleteByPostId(Integer postId);
 }

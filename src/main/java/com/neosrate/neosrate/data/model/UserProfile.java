@@ -8,19 +8,24 @@ public class UserProfile {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
 
-    @Column(name = "pfp_path")
-    private String pfpPath;
+    @Column(nullable = false)
+    private String username;
 
     private String bio = "bio";
 
-    @Column(name = "community_owner")
-    private String communityOwner;
+    @Column(name = "created_at", nullable = false)
+    private String createdAt;
 
-    @Column(name = "community_participant")
-    private String communityParticipant;
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Integer getId() {
         return id;
@@ -38,14 +43,6 @@ public class UserProfile {
         this.userId = userId;
     }
 
-    public String getPfpPath() {
-        return pfpPath;
-    }
-
-    public void setPfpPath(String pfpPath) {
-        this.pfpPath = pfpPath;
-    }
-
     public String getBio() {
         return bio;
     }
@@ -54,19 +51,11 @@ public class UserProfile {
         this.bio = bio;
     }
 
-    public String getCommunityOwner() {
-        return communityOwner;
+    public String getUsername() {
+        return username;
     }
 
-    public void setCommunityOwner(String communityOwner) {
-        this.communityOwner = communityOwner;
-    }
-
-    public String getCommunityParticipant() {
-        return communityParticipant;
-    }
-
-    public void setCommunityParticipant(String communityParticipant) {
-        this.communityParticipant = communityParticipant;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

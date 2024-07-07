@@ -6,5 +6,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface CommunityRepository extends CrudRepository<Community, Integer> {
-    List<Community> findByName(String community);
+    Community findByName(String community);
+
+    List<Community> findByCreator(String username);
+
+    void deleteAllByCreator(String username);
 }

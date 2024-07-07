@@ -1,9 +1,14 @@
-package com.neosrate.neosrate.data.dto;
+package com.neosrate.neosrate.data.dto.Community;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 public class CommunityDto {
-    @NotBlank(message = "Name is required")
+//    @NotBlank(message = "Name is required")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "Only letters, not space.")
     private String name;
 
     private String description;
@@ -15,7 +20,7 @@ public class CommunityDto {
 
     private String totalPost;
 
-    private String createdAt;
+    private String createdAt = LocalDateTime.now(ZoneOffset.of("-03:00")).toString();
 
     public String getName() {
         return name;

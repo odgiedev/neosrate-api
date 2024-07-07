@@ -1,65 +1,36 @@
 package com.neosrate.neosrate.controller;
 
 import com.neosrate.neosrate.data.dto.user.UserProfileDto;
-import com.neosrate.neosrate.data.model.User;
-import com.neosrate.neosrate.data.model.UserProfile;
-import com.neosrate.neosrate.repository.UserProfileRepository;
-import com.neosrate.neosrate.repository.UserRepository;
+import com.neosrate.neosrate.service.UserProfileService;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/userprofile")
 public class UserProfileController {
-    @Autowired
-    UserProfileRepository userProfileRepository;
+    final
+    UserProfileService userProfileService;
 
-    ModelMapper modelMapper = new ModelMapper();
-
-    @GetMapping("/get/{userId}")
-    public ResponseEntity<?> getUserProfile(@PathVariable Integer userId) {
-        Optional<UserProfile> userProfileOptional = userProfileRepository.findByUserId(userId);
-
-        if (userProfileOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("USER NOT FOUND");
-        }
-
-        UserProfile user = userProfileOptional.get();
-
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+    public UserProfileController(UserProfileService userProfileService) {
+        this.userProfileService = userProfileService;
     }
 
-    @PutMapping("/update/{userId}")
+    @PostMapping("/update/pfp/{userId}")
+    public ResponseEntity<?> updatePfp(@RequestParam("file") MultipartFile file, @PathVariable Integer userId) throws IOException {
+        return userProfileService.updatePfp(file, userId);
+    }
+
+    @GetMapping("/get/{username}")
+    public ResponseEntity<?> getUserProfile(@PathVariable String username) {
+        return userProfileService.getUserProfile(username);
+    }
+
+    @PutMapping("/update/{userId}/{ownerId}")
     public ResponseEntity<String> updateUserProfile(@PathVariable Integer userId, @RequestBody @Valid UserProfileDto userUpdateData) {
-        var optionalUserProfile = userProfileRepository.findByUserId(userId);
-
-        if (!optionalUserProfile.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("USER NOT FOUND");
-        }
-
-        var user = optionalUserProfile.get();
-
-        if (userUpdateData.getBio() != null) {
-            user.setBio(userUpdateData.getBio());
-        }
-        if (userUpdateData.getPfpPath() != null) {
-            user.setPfpPath(userUpdateData.getPfpPath());
-        }
-        if (userUpdateData.getCommunityOwner() != null) {
-            user.setCommunityOwner(userUpdateData.getCommunityOwner());
-        }
-        if (userUpdateData.getCommunityParticipant() != null) {
-            user.setCommunityParticipant(userUpdateData.getCommunityParticipant());
-        }
-
-        userProfileRepository.save(user);
-
-        return ResponseEntity.ok().body("USER UPDATED");
+        return userProfileService.updateUserProfile(userId, userUpdateData);
     }
 }

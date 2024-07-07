@@ -8,19 +8,15 @@ public class Community {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
+    @Column(unique = true, nullable = false)
     private String name;
 
     private String description;
 
+    @Column(nullable = false)
     private String creator;
 
-    @Column(name = "total_participant")
-    private String totalParticipant;
-
-    @Column(name = "total_post")
-    private String totalPost;
-
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private String createdAt;
 
     public Integer getId() {
@@ -53,22 +49,6 @@ public class Community {
 
     public void setCreator(String creator) {
         this.creator = creator;
-    }
-
-    public String getTotalParticipant() {
-        return totalParticipant;
-    }
-
-    public void setTotalParticipant(String totalParticipant) {
-        this.totalParticipant = totalParticipant;
-    }
-
-    public String getTotalPost() {
-        return totalPost;
-    }
-
-    public void setTotalPost(String totalPost) {
-        this.totalPost = totalPost;
     }
 
     public String getCreatedAt() {

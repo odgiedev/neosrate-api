@@ -8,49 +8,28 @@ public class Post {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Integer userId;
 
+    @Column(nullable = false)
     private String community;
 
+    @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String title;
 
     private String text;
 
-    public Integer getDislikeCount() {
-        return dislikeCount;
-    }
+    @Column(name = "created_at", nullable = false)
+    private String createdAt;
 
-    public void setDislikeCount(Integer dislikeCount) {
-        this.dislikeCount = dislikeCount;
-    }
-
-    @Column(name = "dislike_count", columnDefinition = "INT DEFAULT 0")
+    @Column(name = "dislike_count", columnDefinition = "INT DEFAULT 0", nullable = false)
     private Integer dislikeCount;
 
-    @Column(name = "like_count", columnDefinition = "INT DEFAULT 0")
+    @Column(name = "like_count", columnDefinition = "INT DEFAULT 0", nullable = false)
     private Integer likeCount;
-
-    public Integer getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(Integer likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public Integer getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(Integer commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    @Column(name = "comment_count", columnDefinition = "INT DEFAULT 0")
-    private Integer commentCount;
 
     @Column(name = "file_path")
     private String filePath;
@@ -69,6 +48,14 @@ public class Post {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getCommunity() {
+        return community;
+    }
+
+    public void setCommunity(String community) {
+        this.community = community;
     }
 
     public String getUsername() {
@@ -95,12 +82,28 @@ public class Post {
         this.text = text;
     }
 
-    public String getCommunity() {
-        return community;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCommunity(String community) {
-        this.community = community;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public void setDislikeCount(Integer dislikeCount) {
+        this.dislikeCount = dislikeCount;
+    }
+
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
     }
 
     public String getFilePath() {

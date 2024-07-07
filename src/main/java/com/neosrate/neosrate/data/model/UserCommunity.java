@@ -3,7 +3,7 @@ package com.neosrate.neosrate.data.model;
 import jakarta.persistence.*;
 
 @Entity
-public class UserLike {
+public class UserCommunity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
@@ -11,21 +11,14 @@ public class UserLike {
     @Column(name = "user_id", nullable = false)
     private Integer userId;
 
-    @Column(name = "post_id", nullable = false)
-    private Integer postId;
+    @Column(nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String community;
 
-    @Column(name = "like_type", nullable = false)
-    private Integer likeType = 0;
-
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Integer getUserId() {
@@ -36,12 +29,12 @@ public class UserLike {
         this.userId = userId;
     }
 
-    public Integer getPostId() {
-        return postId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setPostId(Integer postId) {
-        this.postId = postId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getCommunity() {
@@ -50,13 +43,5 @@ public class UserLike {
 
     public void setCommunity(String community) {
         this.community = community;
-    }
-
-    public Integer getLikeType() {
-        return likeType;
-    }
-
-    public void setLikeType(Integer likeType) {
-        this.likeType = likeType;
     }
 }

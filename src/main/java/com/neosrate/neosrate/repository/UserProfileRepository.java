@@ -7,4 +7,7 @@ import java.util.Optional;
 
 public interface UserProfileRepository extends CrudRepository<UserProfile, Integer> {
     Optional<UserProfile> findByUserId(Integer userId);
+    UserProfile findByUsername(String username);
+
+    void deleteByUserId(Integer ownerId);
 }

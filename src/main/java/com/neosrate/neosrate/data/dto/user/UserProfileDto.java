@@ -1,20 +1,42 @@
 package com.neosrate.neosrate.data.dto.user;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class UserProfileDto {
-    public String getUserId() {
+    private Integer userId;
+
+    private String username;
+
+    private String pfpName;
+
+    private String bio;
+
+    private String communityOwner;
+
+    private String communityParticipant;
+
+    private String createdAt;
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getPfpName() {
+        return pfpName;
     }
 
-    public String getPfpPath() {
-        return pfpPath;
-    }
-
-    public void setPfpPath(String pfpPath) {
-        this.pfpPath = pfpPath;
+    public void setPfpName(String pfpName) {
+        this.pfpName = pfpName;
     }
 
     public String getBio() {
@@ -41,13 +63,15 @@ public class UserProfileDto {
         this.communityParticipant = communityParticipant;
     }
 
-    private String userId;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
-    private String pfpPath;
+    public String getUsername() {
+        return username;
+    }
 
-    private String bio;
-
-    private String communityOwner;
-
-    private String communityParticipant;
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

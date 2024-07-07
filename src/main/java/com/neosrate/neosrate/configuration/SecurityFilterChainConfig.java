@@ -1,6 +1,5 @@
 package com.neosrate.neosrate.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,13 +14,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityFilterChainConfig {
-    @Autowired
+    final
     SecurityFilter securityFilter;
+
+    public SecurityFilterChainConfig(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -32,6 +34,24 @@ public class SecurityFilterChainConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/user/signin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/user/create").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/user/get/recent").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/comment/get/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/comment/get/all/{community}").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/post/get/all/{maxPerPage}/{userId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post/get/recent").permitAll()
+                        .requestMatchers(HttpMethod.GET , "/api/post/get/all/user/{maxPerPage}/{userId}/{username}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post/get/all/community/{maxPerPage}/{community}/{userId}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/post/search/{maxPerPage}/{userId}/{searchQuery}").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/userprofile/get/{username}").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/community/get/community/{community}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/community/get/all/community").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/community/get/participants/{community}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/community/get/owner/{username}").permitAll()
+
                         .anyRequest().authenticated()
                 )
 
